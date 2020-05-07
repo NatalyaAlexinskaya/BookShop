@@ -1,15 +1,4 @@
-Camel Router Spring Project
-===========================
+JPA:
 
-To build this project use
-
-    mvn install
-
-To run this project with Maven use
-
-    mvn camel:run
-
-For more help see the Apache Camel documentation
-
-    http://camel.apache.org/
+Необходимо реализовать класс DAO, который будет обеспечивать работу c БД. DAO должен работать через Entity объекты предметной области. DAO использует JPQL. Entity должны описывать варианты взаимодействия: One-To-One, One-To-Many. Реализовать CRUD операции. На каждую сущность своя таблица. Например, вы выбрали "Музыкальный магазин", значит нужно создать три таблицы "песни", "альбомы" и "пользователи" .
 
