@@ -3,18 +3,18 @@ package org.example;
 import org.example.dao.BookDao;
 import org.example.dao.CustomerDao;
 import org.example.dao.GenreDao;
+import org.example.entities.Book;
+import org.example.entities.Customer;
+import org.example.entities.Genre;
 
 import javax.persistence.*;
 
 public class Main {
     // Я использую базу данных H2, поэтому думаю менять ничего не придется в конфигурационном файле.
 
-    //Создаю EntityManager для управления сущностями
-    public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("entityManager");
-    public static EntityManager entityManager = entityManagerFactory.createEntityManager();
-    public static BookDao bookDao = new BookDao(entityManager);
-    public static CustomerDao customerDao = new CustomerDao(entityManager);
-    public static GenreDao genreDao = new GenreDao(entityManager);
+    public static BookDao bookDao = new BookDao();
+    public static CustomerDao customerDao = new CustomerDao();
+    public static GenreDao genreDao = new GenreDao();
 
     public static void main(String[] args) {
         //Создаю 3 книги
@@ -49,12 +49,10 @@ public class Main {
         genreDao.addGenre(genre1);
         customerDao.addCustomer(customer1);
 
+        bookDao.getBookId(1);
+
         //Удаляю одну из книг
-        bookDao.removeBook(2);
-
-        entityManager.close();
-        entityManagerFactory.close();
-
+        bookDao.removeBook(book2);
     }
 
     public static Book getBook(String title, String author) {

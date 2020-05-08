@@ -1,43 +1,54 @@
 package org.example.dao;
 
-import org.example.Genre;
+import org.example.entities.Genre;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GenreDao {
     private EntityManager entityManager;
 
-    public GenreDao(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
     public void addGenre(Genre genre) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(genre);
-        entityManager.getTransaction().commit();
+        getTransaction(entityManager1 -> entityManager1.persist(genre));
     }
 
     public void updateGenre(Genre genre, String newGenre) {
-        entityManager.getTransaction().begin();
         genre.setName(newGenre);
-        entityManager.merge(genre);
-        entityManager.getTransaction().commit();
+        getTransaction(entityManager1 -> entityManager1.merge(genre));
     }
 
     public void removeGenre(Genre genre) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(genre);
-        entityManager.getTransaction().commit();
+        getTransaction(entityManager1 -> entityManager1.remove(entityManager1.contains(genre) ? genre : entityManager1.merge(genre)));
     }
 
-    public Genre getGenreId(int id) {
-        entityManager.getTransaction().begin();
-        Genre genre = entityManager.find(Genre.class, id);
-        entityManager.getTransaction().commit();
-
-        return genre;
+    public void getGenreId(int id) {
+        getTransaction(entityManager1 -> entityManager1.find(Genre.class, id));
     }
 
-    public List<Genre> getListGenres() { return entityManager.createNamedQuery("Genre").getResultList(); }
+    public List<Genre> getListGenres() {
+        entityManager = Persistence.createEntityManagerFactory("entityManager").createEntityManager();
+        List<Genre> genres = entityManager.createNamedQuery("Genre").getResultList();
+        entityManager.close();
+        return genres;
+    }
+
+    private void getTransaction(Consumer<EntityManager> consumer) {
+        entityManager = Persistence.createEntityManagerFactory("entityManager").createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            consumer.accept(entityManager);
+            if (transaction.isActive()) {
+                transaction.commit();
+            }
+        } catch (RuntimeException e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
 }

@@ -1,46 +1,54 @@
 package org.example.dao;
 
-import org.example.Book;
+import org.example.entities.Book;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BookDao {
     private EntityManager entityManager;
 
-    public BookDao(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
     public void addBook(Book book) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(book);
-        entityManager.getTransaction().commit();
+        getTransaction(entityManager1 -> entityManager1.persist(book));
     }
 
     public void updateBook(Book book, String newBook) {
-        entityManager.getTransaction().begin();
         book.setTitle(newBook);
-        entityManager.merge(book);
-        entityManager.getTransaction().commit();
+        getTransaction(entityManager1 -> entityManager1.merge(book));
     }
 
-    public void removeBook(int id) {
-        entityManager.getTransaction().begin();
-        Book book = entityManager.find(Book.class, id);
-        entityManager.remove(book);
-        entityManager.getTransaction().commit();
+    public void removeBook(Book book) {
+        getTransaction(entityManager1 -> entityManager1.remove(entityManager1.contains(book) ? book : entityManager1.merge(book)));
     }
 
-    public Book getBookId(int id) {
-        entityManager.getTransaction().begin();
-        Book book = entityManager.find(Book.class, id);
-        entityManager.getTransaction().commit();
-
-        return book;
+    public void getBookId(int id) {
+        getTransaction(entityManager1 -> entityManager1.find(Book.class, id));
     }
 
     public List<Book> getListBooks() {
-        return entityManager.createNamedQuery("Book").getResultList();
+        entityManager = Persistence.createEntityManagerFactory("entityManager").createEntityManager();
+        List<Book> books = entityManager.createNamedQuery("Book").getResultList();
+        entityManager.close();
+        return books;
+    }
+
+    private void getTransaction(Consumer<EntityManager> consumer) {
+        entityManager = Persistence.createEntityManagerFactory("entityManager").createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            consumer.accept(entityManager);
+            if (transaction.isActive()) {
+                transaction.commit();
+            }
+        } catch (RuntimeException e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
     }
 }

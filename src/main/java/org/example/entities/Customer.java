@@ -1,28 +1,26 @@
-package org.example;
+package org.example.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "genre_list")
-@NamedQuery(name = "Genre", query = "select g from Genre g")
-public class Genre {
+@Table(name = "customer_list")
+@NamedQuery(name = "Customer", query = "select c from Customer c")
+public class Customer {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "Genre_Name")
+    @Column(name = "Customer_Name")
     private String name;
 
-   @OneToMany (mappedBy = "genre", fetch = FetchType.EAGER)
-    private List<Book> books = new ArrayList<>();
+    @OneToOne(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Book book;
 
-    public Genre() {
+    public Customer() {
     }
 
-    public Genre(String name) {
+    public Customer(String name) {
         this.name = name;
     }
 
@@ -42,20 +40,20 @@ public class Genre {
         this.name = name;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     @Override
     public String toString() {
-        return "Genre{" +
+        return "Customer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", books=" + books +
+                ", books=" + book +
                 '}';
     }
 }

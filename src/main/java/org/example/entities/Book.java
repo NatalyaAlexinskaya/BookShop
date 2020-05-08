@@ -1,4 +1,4 @@
-package org.example;
+package org.example.entities;
 
 import javax.persistence.*;
 
@@ -17,10 +17,10 @@ public class Book {
     @Column(name = "Author")
     private String author;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Genre genre;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Customer customer;
 
     public Book() {
