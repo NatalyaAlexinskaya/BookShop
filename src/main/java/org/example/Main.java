@@ -27,7 +27,7 @@ public class Main {
         bookDao.addBook(book2);
         bookDao.addBook(book3);
 
-        bookDao.getListBooks();
+//        bookDao.getListBooks();
 
         //Создаю жанр
         Genre genre1 = getGenre("Приключения");
@@ -49,10 +49,15 @@ public class Main {
         genreDao.addGenre(genre1);
         customerDao.addCustomer(customer1);
 
-        bookDao.getBookId(1);
+//        bookDao.getBookId(1);
 
         //Удаляю одну из книг
-        bookDao.removeBook(book2);
+//        bookDao.removeBook(book2);
+
+        //Запускаю Json
+        JsonReader json = new JsonReader(bookDao);
+        json.jsonRead();
+        json.jsonWrite();
     }
 
     public static Book getBook(String title, String author) {
