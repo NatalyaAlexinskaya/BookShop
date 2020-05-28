@@ -1,10 +1,25 @@
 package org.example.entities;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "book")
-@NamedQuery(name = "Book", query = "select b from Book b")
+@NamedQueries({
+        @NamedQuery(name = "Book", query = "select b from Book b"),
+        @NamedQuery(name = "Book.ID", query = "select b from Book b where b.id = :id")
+})
 public class Book {
     @Id
     @Column(name = "ID")
@@ -17,10 +32,12 @@ public class Book {
     @Column(name = "Author")
     private String author;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "Genre_ID")
     private Genre genre;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "Customer_ID")
     private Customer customer;
 
     public Book() {
@@ -29,6 +46,13 @@ public class Book {
     public Book(String title, String author) {
         this.title = title;
         this.author = author;
+    }
+
+    public Book(String title, String author, Genre genre, Customer customer) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.customer = customer;
     }
 
     public int getId() {

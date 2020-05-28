@@ -1,10 +1,22 @@
 package org.example.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "customer_list")
-@NamedQuery(name = "Customer", query = "select c from Customer c")
+@NamedQueries({
+        @NamedQuery(name = "Customer", query = "select c from Customer c"),
+        @NamedQuery(name = "Customer.ID", query = "select c from Customer c where c.id = :id")
+})
 public class Customer {
     @Id
     @Column(name = "ID")
