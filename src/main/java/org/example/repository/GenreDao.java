@@ -1,17 +1,7 @@
 package org.example.repository;
 
 import org.example.entities.Genre;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-
-public interface GenreDao {
-    void addGenre(Genre genre);
-
-    void updateGenre(Genre genre);
-
-    void removeGenre(Genre genre);
-
-    Genre getGenreId(int id);
-
-    List<Genre> getListGenres();
+public interface GenreDao extends CrudRepository<Genre, Integer> {
 }

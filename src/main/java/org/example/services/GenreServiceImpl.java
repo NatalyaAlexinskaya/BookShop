@@ -1,42 +1,34 @@
 package org.example.services;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Genre;
 import org.example.repository.GenreDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class GenreServiceImpl implements GenreService {
     private GenreDao genreDao;
 
-    public GenreServiceImpl(GenreDao genreDao) {
-        this.genreDao = genreDao;
-    }
-
     @Override
     public void addGenre(Genre genre) {
-        genreDao.addGenre(genre);
-    }
-
-    @Override
-    public void updateGenre(Genre genre) {
-        genreDao.updateGenre(genre);
+        genreDao.save(genre);
     }
 
     @Override
     public void removeGenre(Genre genre) {
-        genreDao.removeGenre(genre);
+        genreDao.delete(genre);
     }
 
     @Override
-    public Genre getGenreId(int id) {
-        return genreDao.getGenreId(id);
+    public Optional<Genre> getGenreId(int id) {
+        return genreDao.findById(id);
     }
 
     @Override
-    public List<Genre> getListGenres() {
-        return genreDao.getListGenres();
+    public Iterable<Genre> getListGenres() {
+        return genreDao.findAll();
     }
 }

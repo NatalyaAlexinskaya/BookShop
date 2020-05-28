@@ -1,42 +1,34 @@
 package org.example.services;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Customer;
 import org.example.repository.CustomerDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private CustomerDao customerDao;
 
-    public CustomerServiceImpl(CustomerDao customerDao) {
-        this.customerDao = customerDao;
-    }
-
     @Override
     public void addCustomer(Customer customer) {
-        customerDao.addCustomer(customer);
-    }
-
-    @Override
-    public void updateCustomer(Customer customer) {
-        customerDao.updateCustomer(customer);
+        customerDao.save(customer);
     }
 
     @Override
     public void removeCustomer(Customer customer) {
-        customerDao.removeCustomer(customer);
+        customerDao.delete(customer);
     }
 
     @Override
-    public Customer getCustomerId(int id) {
-        return customerDao.getCustomerId(id);
+    public Optional<Customer> getCustomerId(int id) {
+        return customerDao.findById(id);
     }
 
     @Override
-    public List<Customer> getListCustomers() {
-        return customerDao.getListCustomers();
+    public Iterable<Customer> getListCustomers() {
+        return customerDao.findAll();
     }
 }

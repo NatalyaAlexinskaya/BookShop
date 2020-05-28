@@ -1,5 +1,11 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +17,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "customer_list")
 @NamedQueries({
         @NamedQuery(name = "Customer", query = "select c from Customer c"),
         @NamedQuery(name = "Customer.ID", query = "select c from Customer c where c.id = :id")
 })
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Customer {
     @Id
     @Column(name = "ID")
@@ -28,37 +38,6 @@ public class Customer {
 
     @OneToOne(mappedBy = "customer", fetch = FetchType.EAGER)
     private Book book;
-
-    public Customer() {
-    }
-
-    public Customer(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
 
     @Override
     public String toString() {

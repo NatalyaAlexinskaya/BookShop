@@ -1,44 +1,37 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Book;
-import org.example.repository.BookDao;
+import org.example.services.BookService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "book")
 public class BookController {
-    private BookDao bookDao;
-
-    public BookController(BookDao bookDao) {
-        this.bookDao = bookDao;
-    }
+    private BookService bookService;
 
     @GetMapping(path = "/all")
-    public List<Book> getBooks() {
-        return bookDao.getListBooks();
+    public Iterable<Book> getBooks() {
+        return bookService.getListBooks();
     }
 
     @GetMapping(path = "/{id}")
-    public Book getById(@PathVariable(name = "id") Integer id) {
-        return bookDao.getBookId(id);
+    public Optional<Book> getById(@PathVariable(name = "id") Integer id) {
+        return bookService.getBookId(id);
     }
 
     @PostMapping(path = "/add")
     public void addBook(@RequestBody Book book) {
         if (book != null) {
-            bookDao.addBook(book);
+            bookService.addBook(book);
         }
-    }
-
-    @PutMapping(path = "/update")
-    public void updateBook(@RequestBody Book book) {
-        bookDao.updateBook(book);
     }
 
     @DeleteMapping(path = "/remove")
     public void removeBook(@RequestBody Book book) {
-        bookDao.removeBook(book);
+        bookService.removeBook(book);
     }
 }

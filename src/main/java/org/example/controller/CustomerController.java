@@ -1,43 +1,36 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Customer;
-import org.example.repository.CustomerDao;
+import org.example.services.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "customer")
 public class CustomerController {
-    private CustomerDao customerDao;
-
-    public CustomerController(CustomerDao customerDao) {
-        this.customerDao = customerDao;
-    }
+    private CustomerService customerService;
 
     @GetMapping(path = "/all")
-    public List<Customer> getCustomers() {
-        return customerDao.getListCustomers();
+    public Iterable<Customer> getCustomers() {
+        return customerService.getListCustomers();
     }
 
     @GetMapping(path = "/{id}")
-    public Customer getById(@PathVariable(name = "id") Integer id) {
-        return customerDao.getCustomerId(id);
+    public Optional<Customer> getById(@PathVariable(name = "id") Integer id) {
+        return customerService.getCustomerId(id);
     }
 
     @PostMapping(path = "/add")
     public void addCustomer(@RequestBody Customer customer) {
-        customerDao.addCustomer(customer);
-    }
-
-    @PutMapping(path = "/update")
-    public void updateCustomer(@RequestBody Customer customer) {
-        customerDao.updateCustomer(customer);
+        customerService.addCustomer(customer);
     }
 
     @DeleteMapping(path = "/remove")
     public void removeCustomer(@RequestBody Customer customer) {
-        customerDao.removeCustomer(customer);
+        customerService.removeCustomer(customer);
     }
 }
 

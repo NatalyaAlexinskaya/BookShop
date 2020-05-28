@@ -1,41 +1,34 @@
 package org.example.services;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Book;
 import org.example.repository.BookDao;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
     private BookDao bookDao;
 
-    public BookServiceImpl(BookDao bookDao) {
-        this.bookDao = bookDao;
-    }
-
     @Override
     public void addBook(Book book) {
-        bookDao.addBook(book);
-    }
-
-    @Override
-    public void updateBook(Book book) {
-        bookDao.updateBook(book);
+        bookDao.save(book);
     }
 
     @Override
     public void removeBook(Book book) {
-        bookDao.removeBook(book);
+        bookDao.delete(book);
     }
 
     @Override
-    public Book getBookId(int id) {
-        return bookDao.getBookId(id);
+    public Optional<Book> getBookId(int id) {
+        return bookDao.findById(id);
     }
 
     @Override
-    public List<Book> getListBooks() {
-        return bookDao.getListBooks();
+    public Iterable<Book> getListBooks() {
+        return bookDao.findAll();
     }
 }
