@@ -2,16 +2,14 @@ package org.example.services;
 
 import org.example.entities.Customer;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface CustomerService {
     void addCustomer(Customer customer);
 
-    void updateCustomer(Customer customer);
-
     void removeCustomer(Customer customer);
 
-    Customer getCustomerId(int id);
+    Optional<Customer> getCustomerId(int id);
 
-    List<Customer> getListCustomers();
+    Iterable<Customer> getListCustomers();
 }

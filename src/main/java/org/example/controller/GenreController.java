@@ -1,42 +1,35 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.entities.Genre;
-import org.example.repository.GenreDao;
+import org.example.services.GenreService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "genre")
 public class GenreController {
-    private GenreDao genreDao;
-
-    public GenreController(GenreDao genreDao) {
-        this.genreDao = genreDao;
-    }
+    private GenreService genreService;
 
     @GetMapping(path = "/all")
-    public List<Genre> getGenres() {
-        return genreDao.getListGenres();
+    public Iterable<Genre> getGenres() {
+        return genreService.getListGenres();
     }
 
     @GetMapping(path = "/{id}")
-    public Genre getById(@PathVariable(name = "id") Integer id) {
-        return genreDao.getGenreId(id);
+    public Optional<Genre> getById(@PathVariable(name = "id") Integer id) {
+        return genreService.getGenreId(id);
     }
 
     @PostMapping(path = "/add")
     public void addGenre(@RequestBody Genre genre) {
-        genreDao.addGenre(genre);
-    }
-
-    @PutMapping(path = "/update")
-    public void updateGenre(@RequestBody Genre genre) {
-        genreDao.updateGenre(genre);
+        genreService.addGenre(genre);
     }
 
     @DeleteMapping(path = "/remove")
     public void removeGenre(@RequestBody Genre genre) {
-        genreDao.removeGenre(genre);
+        genreService.removeGenre(genre);
     }
 }

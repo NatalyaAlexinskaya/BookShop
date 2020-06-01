@@ -2,16 +2,14 @@ package org.example.services;
 
 import org.example.entities.Book;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface BookService {
     void addBook(Book book);
 
-    void updateBook(Book book);
-
     void removeBook(Book book);
 
-    Book getBookId(int id);
+    Optional<Book> getBookId(int id);
 
-    List<Book> getListBooks();
+    Iterable<Book> getListBooks();
 }
