@@ -2,7 +2,7 @@ package org.example;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dao.BookDao;
+import org.example.dao.BookDaoImpl;
 import org.example.entities.Book;
 
 import java.io.File;
@@ -13,9 +13,9 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class JsonReader {
-    BookDao bookDao;
+    BookDaoImpl bookDao;
 
-    public JsonReader(BookDao bookDao) {
+    public JsonReader(BookDaoImpl bookDao) {
         this.bookDao = bookDao;
     }
 
